@@ -7,6 +7,13 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+fastapi = "^0.115.5"
+aiohttp = "^3.11.1"
+asyncpg = "^0.30.0"
+pydantic = {extras = ["dotenv"], version = "^2.9.2"}
+aioredis = "^2.0.1"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 
 [build-system]
