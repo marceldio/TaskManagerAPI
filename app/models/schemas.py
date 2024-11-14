@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 from enum import Enum
 
+
 class TaskStatus(str, Enum):
     in_progress = "in_progress"
     completed = "completed"
