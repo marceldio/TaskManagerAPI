@@ -17,6 +17,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-dotenv = "^1.0.1"
 sqlalchemy = "^2.0.36"
 alembic = "^1.14.0"
+psycopg2-binary = "^2.9.10"
 
 
 [build-system]
