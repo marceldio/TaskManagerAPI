@@ -1,4 +1,4 @@
-web application for managing task list
+Web application for managing task list
 # TaskManagerAPI
 
 Задача:
