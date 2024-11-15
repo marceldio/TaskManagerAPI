@@ -3,7 +3,9 @@ from sqlalchemy import create_engine, pool
 from alembic import context
 import os
 from dotenv import load_dotenv
-from app.models.models import Base
+from app.db.database import Base
+# Убедитесь, что эти импорты не удаляются сборщиком, так как они регистрируют модели в Base.metadata
+from app.models.models import User, Task
 
 # Загружаем переменные окружения
 load_dotenv()
@@ -34,7 +36,7 @@ def run_migrations_offline() -> None:
 
 def run_migrations_online() -> None:
     """Запуск миграций в 'онлайн' режиме."""
-    connectable = create_engine(
+    connectable = create_engine(  # Используем синхронный движок
         config.get_main_option("sqlalchemy.url"),
         poolclass=pool.NullPool,
     )
@@ -49,6 +51,8 @@ def run_migrations_online() -> None:
             context.run_migrations()
 
 if context.is_offline_mode():
+    print(f"Using database URL: {os.getenv('DATABASE_URL')}")
     run_migrations_offline()
 else:
+    print(f"Database URL: {os.getenv('DATABASE_URL')}")
     run_migrations_online()

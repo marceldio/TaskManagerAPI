@@ -1,13 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.schemas import TaskCreate, TaskOut
-from app.db.database import get_db
 from app.models.models import Task
 from typing import List
 from sqlalchemy.future import select  # Импорт select из SQLAlchemy
 from app.models.models import Task as TaskModel  # Импорт TaskModel
-
-
 
 router = APIRouter()
 
@@ -25,5 +22,3 @@ async def get_tasks(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(TaskModel))
     tasks = result.scalars().all()
     return tasks  # Возвращаем объекты TaskModel
-
-

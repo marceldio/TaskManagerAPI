@@ -56,17 +56,3 @@ class UserOut(BaseModel):
 
     class Config:
         orm_mode = True
-
-
-# Схема для создания пользователя
-class UserCreate(BaseModel):
-    username: str
-    password: str
-
-# Схема для отображения пользователя
-class UserOut(BaseModel):
-    id: int
-    username: str
-
-    class Config:
-        orm_mode = True
