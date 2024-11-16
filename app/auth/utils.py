@@ -3,9 +3,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.context import CryptContext
 from jose import jwt
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from app.models.models import User
 import bcrypt
+from sqlalchemy.sql import Select
 
 
 
@@ -24,20 +25,32 @@ def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 
-async def authenticate_user(username: str, password: str, db: AsyncSession):
-    stmt = select(User).where(User.username == username)
+async def authenticate_user(username: str, _password: str, db: AsyncSession):
+    stmt = select(User).where(User.username.__eq__(str(username)))
     result = await db.execute(stmt)
-    user = result.scalar_one_or_none()  # Получаем одного пользователя или None
+    user = result.scalar_one_or_none()
     return user
+
 
 
 # Функция для создания access токена
 def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
     to_encode = data.copy()
     if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+        expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+# Функция для создания refresh токена
+def create_refresh_token(data: dict, expires_delta: timedelta | None = None) -> str:
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(days=int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", 7)))
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
