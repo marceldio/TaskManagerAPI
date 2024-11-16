@@ -1,6 +1,6 @@
-from pydantic import BaseModel
 from typing import Optional
 from enum import Enum
+from pydantic import BaseModel, ConfigDict
 
 
 class TaskStatus(str, Enum):
@@ -16,9 +16,7 @@ class TaskOut(BaseModel):
     status: TaskStatus
     user_id: Optional[int]  # Позволяет быть None, если пользователь не установлен
 
-    class Config:
-        orm_mode = True
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Схема для создания задачи
@@ -27,9 +25,7 @@ class TaskCreate(BaseModel):
     description: Optional[str] = None
     status: TaskStatus = TaskStatus.in_progress
 
-    class Config:
-        orm_mode = True
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Схема для обновления задачи
@@ -38,9 +34,7 @@ class TaskUpdate(BaseModel):
     description: Optional[str] = None
     status: Optional[TaskStatus] = None
 
-    class Config:
-        orm_mode = True
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Схема для создания пользователя
@@ -54,5 +48,4 @@ class UserOut(BaseModel):
     id: int
     username: str
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
