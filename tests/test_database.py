@@ -1,12 +1,12 @@
 from sqlalchemy.orm import Session
-from app.db.database import engine
+from app.db.database import async_engine
 from app.models.models import User, Task
 
 # Проверка подключения и выполнения запросов
 def test_database_operations():
     try:
         # Открываем сессию
-        with Session(engine) as session:
+        with Session(async_engine) as session:
             # 1. Проверяем, можно ли получить записи из таблиц
             print("=== Fetching data from the database ===")
             users = session.query(User).all()

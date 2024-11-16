@@ -3,6 +3,19 @@ from enum import Enum
 from pydantic import BaseModel, ConfigDict
 
 
+# Схема для создания нового пользователя
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+
+# Схема для создания токена доступа
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+# Схема для статуса задачи (в процессе, завершено)
 class TaskStatus(str, Enum):
     in_progress = "in_progress"
     completed = "completed"

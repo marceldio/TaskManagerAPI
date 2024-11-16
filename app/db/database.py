@@ -1,19 +1,29 @@
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
 import os
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import declarative_base
 
 load_dotenv()
 
-# Читаем URL базы данных из переменных окружения
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Создаём синхронный движок для работы с Alembic
-engine = create_engine(DATABASE_URL, echo=True)
+# Асинхронный движок
+async_engine = create_async_engine(
+    DATABASE_URL,
+    echo=True,
+)
 
-# Настраиваем сессии
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+# Асинхронная сессия
+AsyncSessionLocal = sessionmaker(
+    bind=async_engine,
+    class_=AsyncSession,
+    expire_on_commit=False
+)
 
-# Определяем базовый класс для моделей
+# Базовый класс для моделей
 Base = declarative_base()
+
+# Функция получения асинхронной сессии
+async def get_db():
+    async with AsyncSessionLocal() as session:
+        yield session
