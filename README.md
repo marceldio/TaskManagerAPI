@@ -41,3 +41,60 @@ Docker Compose:
 crypt устарел и будет удален в Python 3.13.
 В текущей версии (Python 3.12) функциональность crypt 
 полностью работоспособна.
+
+Инструкция TaskManagerAPI:
+TaskManagerAPI – это RESTful API для управления задачами, 
+разработанный с использованием FastAPI, PostgreSQL, SQLAlchemy, Alembic и Poetry.
+
+Требования
+Для запуска проекта вам понадобятся:
+Docker (версия 20.10+)
+Docker Compose (версия 1.29+)
+
+Установка и запуск:
+
+1. Клонирование репозитория
+Клонируйте репозиторий проекта на свой локальный компьютер:
+git clone https://github.com/marceldio/TaskManagerAPI.git
+cd TaskManagerAPI
+
+2. Настройка переменных окружения
+Создайте файл .env в корневой директории и заполните его следующими значениями:
+POSTGRES_DB=taskmanager
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres_password
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
+REDIS_HOST=redis
+REDIS_PORT=6379
+Вы можете изменить значения на свои, если это необходимо.
+
+3. Сборка и запуск контейнеров
+Соберите и запустите проект с помощью Docker Compose:
+docker-compose up --build
+После запуска проект будет доступен по адресу: http://127.0.0.1:8000
+
+4. Документация API
+Документация автоматически генерируется FastAPI и доступна по адресу:
+
+Swagger UI: http://127.0.0.1:8000/docs
+ReDoc: http://127.0.0.1:8000/redoc
+
+5. Применение миграций (если необходимо)
+Миграции для базы данных применяются автоматически при запуске контейнера. 
+Если нужно применить их вручную, выполните команды внутри контейнера:
+docker-compose exec web alembic upgrade head
+
+6. Завершение работы
+Для завершения работы остановите и удалите контейнеры:
+docker-compose down
+Если хотите удалить также данные базы данных и кэша Redis, добавьте флаги:
+docker-compose down --volumes --remove-orphans
+
+7. Полезные команды
+Пересборка контейнеров без кэша:
+docker-compose build --no-cache
+Подключение к базе данных внутри контейнера:
+docker-compose exec db psql -U $POSTGRES_USER -d $POSTGRES_DB
+Просмотр логов контейнеров:
+docker-compose logs -f
