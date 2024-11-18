@@ -1,7 +1,8 @@
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
 import os
+
 from dotenv import load_dotenv
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 load_dotenv()
 
@@ -15,13 +16,16 @@ async_engine = create_async_engine(
 
 # Асинхронная сессия
 AsyncSessionLocal = sessionmaker(
-    bind=async_engine,
-    class_=AsyncSession,
-    expire_on_commit=False
+    bind=async_engine, class_=AsyncSession, expire_on_commit=False
 )
+
+# Экспорт фабрики сессий под более коротким именем
+async_session = AsyncSessionLocal
+
 
 # Базовый класс для моделей
 Base = declarative_base()
+
 
 # Функция получения асинхронной сессии
 async def get_db():

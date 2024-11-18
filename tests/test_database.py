@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
+
 from app.db.database import async_engine
-from app.models.models import User, Task
+from app.models.models import Task, User
+
 
 # Проверка подключения и выполнения запросов
 def test_database_operations():
@@ -27,7 +29,7 @@ def test_database_operations():
                 title="Test Task",
                 description="This is a test task.",
                 status="in_progress",
-                user_id=new_user.id
+                user_id=new_user.id,
             )
             session.add(new_task)
             session.commit()
@@ -40,6 +42,7 @@ def test_database_operations():
 
     except Exception as e:
         print(f"Error: {e}")
+
 
 # Запуск проверки
 if __name__ == "__main__":

@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Text, Enum
-from sqlalchemy.orm import relationship
 from enum import Enum as PyEnum
+
+from sqlalchemy import Column, Enum, ForeignKey, Integer, String, Text
+from sqlalchemy.orm import relationship
+
 from app.db.database import Base
 
 
@@ -18,6 +20,7 @@ class TaskStatus(PyEnum):
     in_progress = "in_progress"
     completed = "completed"
 
+
 class Task(Base):
     __tablename__ = "tasks"
 
@@ -28,4 +31,3 @@ class Task(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
 
     user = relationship("User", back_populates="tasks")
-

@@ -1,8 +1,10 @@
 import pytest
 from fastapi.testclient import TestClient
+
 from app.main import app
 
 client = TestClient(app)
+
 
 @pytest.fixture
 def test_task():
@@ -10,8 +12,9 @@ def test_task():
     return {
         "title": "Test Task",
         "description": "This is a test task.",
-        "status": "in_progress"
+        "status": "in_progress",
     }
+
 
 def test_create_task(test_task):
     """Тест на создание задачи."""
@@ -22,6 +25,7 @@ def test_create_task(test_task):
     assert data["description"] == test_task["description"]
     assert data["status"] == test_task["status"]
     assert "id" in data
+
 
 def test_get_tasks():
     """Тест на получение списка задач."""
